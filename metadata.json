@@ -1,0 +1,6 @@
+{
+  "name": "OMNIGO",
+  "description": "AI-Powered Roadside Assistance, Towing, Fleet & Logistics Platform",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
