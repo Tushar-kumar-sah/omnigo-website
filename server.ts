@@ -428,4 +428,8 @@ async function startServer() {
   setupSocketHandlers();
 }
 
-startServer();
+if (!process.env.VERCEL) {
+  startServer();
+}
+
+export default app;
