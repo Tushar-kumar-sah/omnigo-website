@@ -387,6 +387,17 @@ async function startServer() {
       }
     });
 
+    app.get(/^\/privacy($|\/.*)/, async (req, res, next) => {
+      try {
+        const url = req.originalUrl;
+        let html = fs.readFileSync(path.resolve(__dirname, 'privacy.html'), 'utf-8');
+        html = await vite.transformIndexHtml(url, html);
+        res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
+      } catch (e) {
+        next(e);
+      }
+    });
+
     app.use(vite.middlewares);
 
     // Fallback all other routes to index.html
@@ -408,6 +419,9 @@ async function startServer() {
     });
     app.get(/^\/admin($|\/.*)/, (req, res) => {
       res.sendFile(path.join(distPath, 'admin.html'));
+    });
+    app.get(/^\/privacy($|\/.*)/, (req, res) => {
+      res.sendFile(path.join(distPath, 'privacy.html'));
     });
     app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));

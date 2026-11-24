@@ -671,10 +671,22 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
 
           <div>
-            <h4 className="font-bold text-white uppercase mb-3">Support</h4>
+            <h4 className="font-bold text-white uppercase mb-3">Support & Legal</h4>
             <ul className="space-y-2">
               <li><button onClick={onOpenSos} className="hover:text-red-400 text-red-500 font-bold">Emergency SOS</button></li>
               <li><button onClick={onOpenAi} className="hover:text-white">AI Diagnostic Assistant</button></li>
+              <li>
+                <button
+                  onClick={() => {
+                    setActiveTab('privacy');
+                    window.history.pushState({}, '', '/privacy');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="text-[#00D4FF] hover:underline font-semibold"
+                >
+                  Privacy Policy
+                </button>
+              </li>
               <li><a href="#faq" className="hover:text-white">FAQ</a></li>
             </ul>
           </div>
@@ -682,8 +694,21 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
 
         <div className="max-w-7xl mx-auto px-4 lg:px-8 border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] gap-2">
-          <p>© 2026 OMNIGO Mobility Inc. | SDRS META RISE TECH PVT LTD. All rights reserved.</p>
-          <p className="font-num text-gray-400">www.omnigomobility.com • Designed for High-Performance Mobility & Roadside Safety.</p>
+          <p>© 2026 OmniGo • SDRS META RISE TECH PVT LTD. All rights reserved.</p>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => {
+                setActiveTab('privacy');
+                window.history.pushState({}, '', '/privacy');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="text-[#00D4FF] hover:underline"
+            >
+              Privacy Policy
+            </button>
+            <span className="text-gray-600">•</span>
+            <span className="font-num text-gray-400">omnigo.info • Designed for High-Performance Mobility & Roadside Safety.</span>
+          </div>
         </div>
       </footer>
 

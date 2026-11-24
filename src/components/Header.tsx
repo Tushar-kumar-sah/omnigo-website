@@ -44,6 +44,9 @@ export const Header: React.FC<HeaderProps> = ({
     setActiveTab(tab);
     if (tab === 'home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (tab === 'privacy') {
+      window.history.pushState({}, '', '/privacy');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (tab === 'partner') {
       if (onRoleChange) {
         onRoleChange('PARTNER');
@@ -279,6 +282,14 @@ export const Header: React.FC<HeaderProps> = ({
             className="block w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-white/5 text-gray-200 text-xs font-semibold transition-colors"
           >
             Tow Captain Portal
+          </button>
+          <button
+            onClick={() => { handleNavClick('privacy'); setMobileMenuOpen(false); }}
+            className={`block w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+              activeTab === 'privacy' ? 'bg-[#0A84FF]/20 text-[#00D4FF] font-bold' : 'hover:bg-white/5 text-gray-200'
+            }`}
+          >
+            Privacy Policy
           </button>
 
           {/* Quick Action Buttons in Drawer */}

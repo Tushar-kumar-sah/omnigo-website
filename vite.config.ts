@@ -17,6 +17,7 @@ export default defineConfig(() => {
           main: path.resolve(__dirname, 'index.html'),
           partner: path.resolve(__dirname, 'partner.html'),
           admin: path.resolve(__dirname, 'admin.html'),
+          privacy: path.resolve(__dirname, 'privacy.html'),
         },
       },
     },

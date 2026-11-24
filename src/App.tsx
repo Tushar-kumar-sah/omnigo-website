@@ -14,12 +14,15 @@ import { CustomerDashboardView } from './views/CustomerDashboardView';
 import { PartnerDashboardView } from './views/PartnerDashboardView';
 import { AdminDashboardView } from './views/AdminDashboardView';
 import { AuthModal } from './views/AuthModal';
+import { PrivacyPolicyView } from './views/PrivacyPolicyView';
 import { OmniMascotWidget } from './components/OmniMascotWidget';
 import { sounds } from './utils/soundEffects';
 
 export default function App() {
   const [currentRole, setCurrentRole] = useState<AppRole>('GUEST');
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState(() =>
+    typeof window !== 'undefined' && window.location.pathname.startsWith('/privacy') ? 'privacy' : 'home'
+  );
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isSosModalOpen, setIsSosModalOpen] = useState(false);
@@ -47,6 +50,19 @@ export default function App() {
     return () => {
       lenis.destroy();
     };
+  }, []);
+
+  // Listen for browser navigation changes (Back/Forward buttons)
+  useEffect(() => {
+    const handlePopState = () => {
+      if (window.location.pathname.startsWith('/privacy')) {
+        setActiveTab('privacy');
+      } else {
+        setActiveTab('home');
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   const showNotification = (msg: string) => {
@@ -96,7 +112,7 @@ export default function App() {
       />
 
       {/* Main Header & Live Radar Ticker */}
-      {currentRole === 'GUEST' && (
+      {currentRole === 'GUEST' && activeTab !== 'privacy' && (
         <>
           <Header
             currentRole={currentRole}
@@ -126,14 +142,24 @@ export default function App() {
       {/* Multi-Role View Content Renderer */}
       <main className="flex-1">
         {currentRole === 'GUEST' && (
-          <HomeView
-            onOpenBookModal={handleOpenBookModal}
-            onOpenAi={() => setIsAiModalOpen(true)}
-            onOpenSos={() => setIsSosModalOpen(true)}
-            onOpenAuth={() => setIsAuthModalOpen(true)}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
+          activeTab === 'privacy' ? (
+            <PrivacyPolicyView
+              onBackToHome={() => {
+                setActiveTab('home');
+                window.history.pushState({}, '', '/');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+          ) : (
+            <HomeView
+              onOpenBookModal={handleOpenBookModal}
+              onOpenAi={() => setIsAiModalOpen(true)}
+              onOpenSos={() => setIsSosModalOpen(true)}
+              onOpenAuth={() => setIsAuthModalOpen(true)}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+          )
         )}
 
         {currentRole === 'CUSTOMER' && (
@@ -235,7 +261,7 @@ export default function App() {
       />
 
       {/* Native App-Style Mobile Bottom Navigation Bar */}
-      {currentRole === 'GUEST' && (
+      {currentRole === 'GUEST' && activeTab !== 'privacy' && (
         <MobileBottomNav
           activeTab={activeTab}
           onNavigateTab={(tab) => {
